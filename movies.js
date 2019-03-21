@@ -22,19 +22,51 @@ To show the movie's trailer you can use a google youtube api to find and display
 Use your creativity for UI (make it look nice).
 */
 
-sabio.page.services.movies = {};
+sabio.services.movies = {};
 
-sabio.page.services.movies.url =  "http://www.omdbapi.com?"
-sabio.page.services.movies.key = "&apikey=9767d011&"
+//sabio.services.movies.url = "http://www.omdbapi.com/?";
+sabio.services.movies.url = "https://api.themoviedb.org/3/search/movie/"
+//sabio.services.movies.key = "&apikey=9767d011";
+sabio.services.movies.key = "?api_key=c0e86896e7759430c42631468bbf46d3"
 
 sabio.services.movies.getMovie = (onSuccess, onError) => {
-const settings = {
+    //sabio.services.movies.parameters = `s=${$('#searchTerms').val()}`;
+    sabio.services.movies.parameters = `&query=${$('#searchTerms').val()}`;
+    console.log(sabio.services.movies.parameters)
+    const settings = {
 
-    cache: false
-    ,success: onSuccess
-    ,error: onError
-    ,type: "GET"
-}
-$.ajax(`${sabio.page.services.movies.url}${parameters}${sabio.page.services.movie.key}`)
+        cache: false
+        ,dataType:"JSONP"
+        ,success: onSuccess
+        ,error: onError
+        ,type: "GET"
+    }
+    $.ajax(`${sabio.services.movies.url}${sabio.services.movies.key}${sabio.services.movies.parameters}`, settings);
 }
 
+sabio.services.movies.getMovieSuccess = (data, message, xhr) => {
+    console.log('Get Request Successful');
+    //console.log(data.Search);
+    console.log(data);
+    sabio.page.searchData(data.results)
+   //$('#movieList').append(`<img class="movie-poster" src="https://image.tmdb.org/t/p/w500/kBf3g9crrADGMc2AMAMlLBgSm2h.jpg""/>`)
+}
+
+//Standard error function
+sabio.services.movies.onError = (xhr, error, status) => {
+    console.log("Post request was unsuccesful");
+    console.log(data.responseText);
+}
+
+sabio.page.searchMovies = () => {
+    sabio.services.movies.getMovie(sabio.services.movies.getMovieSuccess, sabio.services.movies.onSuccess)
+}
+sabio.page.searchData = array => {
+    let movies = array
+    for (let movie of movies){
+        console.log(movie)
+    $('#movieList').append(`
+    <img class="movie-poster" src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/${movie.poster_path}"/>`
+    )
+}
+}
