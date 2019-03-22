@@ -23,6 +23,7 @@ Use your creativity for UI (make it look nice).
 */
 
 sabio.services.movies = {};
+sabio.services.movies.results = null
 
 //sabio.services.movies.url = "http://www.omdbapi.com/?";
 sabio.services.movies.url = "https://api.themoviedb.org/3/search/movie/"
@@ -46,8 +47,8 @@ sabio.services.movies.getMovie = (onSuccess, onError) => {
 
 sabio.services.movies.getMovieSuccess = (data, message, xhr) => {
     console.log('Get Request Successful');
-    //console.log(data.Search);
     console.log(data);
+    sabio.services.movies.results = data.results
     sabio.page.searchData(data.results)
    //$('#movieList').append(`<img class="movie-poster" src="https://image.tmdb.org/t/p/w500/kBf3g9crrADGMc2AMAMlLBgSm2h.jpg""/>`)
 }
@@ -66,7 +67,32 @@ sabio.page.searchData = array => {
     for (let movie of movies){
         console.log(movie)
     $('#movieList').append(`
-    <img class="movie-poster" src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/${movie.poster_path}"/>`
+    <div class="poster" data-movie-id="${movie.id}"><img class="movie-poster" src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/${movie.poster_path}"/></div>`
     )
 }
 }
+
+sabio.page.findDataById = (arr, location) => {
+    const movieId = $(location).parent().data("movie-id")
+    const result = $(arr).find( movie => movie.id === movieId );
+    console.log(result)
+}
+
+sabio.page.moviePoster = () => {
+    console.log('test')
+    $('.movie-poster').hover(sabio.page.handlerIn, sabio.page.handlerOut)
+}
+
+sabio.page.handlerIn = (event) => {
+    const location = event.currentTarget
+    console.log('mouseenter')
+    sabio.page.findDataById(sabio.services.movies.results, location)
+
+  // $('#myModal').modal('show')
+}
+
+sabio.page.handlerOut = () => {
+    console.log('mouseout')
+    $('#myModal').modal('hide')
+}
+
