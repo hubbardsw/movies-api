@@ -1,26 +1,3 @@
-// OMDb API Key: 9767d011
-// Example: http://www.omdbapi.com/?i=tt3896198&apikey=9767d011
-// http://www.omdbapi.com/?t=Hackers ...Title Only
-//http://www.omdbapi.com/?t=Hackers&y=2000&plot=full ...Title and Year
-
-/*Your goal is to create an html page that will search for movies and after getting back the movies that match the search you should display the list of movies poster images.
-
-Once you click on the movie's image you should open a modal that should show the movie's trailer and the movie's:
-
-Director
-
-Year: 
-
-Genre: 
-
-Rotten Tomato Rating:
-
-Plot: 
-
-To show the movie's trailer you can use a google youtube api to find and display it. Reference https://developers.google.com/youtube/v3/docs/.
-
-Use your creativity for UI (make it look nice).
-*/
 
 sabio.services.movies = {};
 sabio.services.movies.results = null
@@ -46,9 +23,9 @@ sabio.services.movies.getMovie = (onSuccess, onError) => {
 }
 
 sabio.services.movies.getMovieSuccess = (data, message, xhr) => {
-    console.log('Get Request Successful');
-    console.log(data);
+    console.log('Get Request Successful');;
     sabio.services.movies.results = data.results
+    console.log(sabio.services.movies.results)
     sabio.page.searchData(data.results)
    //$('#movieList').append(`<img class="movie-poster" src="https://image.tmdb.org/t/p/w500/kBf3g9crrADGMc2AMAMlLBgSm2h.jpg""/>`)
 }
@@ -74,7 +51,7 @@ sabio.page.searchData = array => {
 
 sabio.page.findDataById = (arr, location) => {
     const movieId = $(location).parent().data("movie-id")
-    const result = $(arr).find( movie => movie.id === movieId );
+    const result = arr.find( movie => movie.id === movieId );
     console.log(result)
 }
 
@@ -95,4 +72,5 @@ sabio.page.handlerOut = () => {
     console.log('mouseout')
     $('#myModal').modal('hide')
 }
+
 
